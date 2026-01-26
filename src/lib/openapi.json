@@ -67,6 +67,41 @@
           }
         }
       }
+    },
+    "/api/sites": {
+      "get": {
+        "tags": ["Site"],
+        "summary": "媒体マスタ全取得",
+        "description": "媒体マスタ（m_site）の全データを取得します",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "sites": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": { "type": "number", "example": 1 },
+                          "name": { "type": "string", "example": "リクナビNEXT" },
+                          "createdAt": { "type": "string", "example": "2026-01-27T12:00:00.000Z" }
+                        },
+                        "required": ["id", "name", "createdAt"]
+                      },
+                      "example": []
+                    }
+                  },
+                  "required": ["sites"]
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

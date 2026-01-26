@@ -85,6 +85,55 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/api/sites': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * 媒体マスタ全取得
+     * @description 媒体マスタ（m_site）の全データを取得します
+     */
+    get: {
+      parameters: {
+        query?: never
+        header?: never
+        path?: never
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description Success */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': {
+              /** @example [] */
+              sites: {
+                /** @example 1 */
+                id: number
+                /** @example リクナビNEXT */
+                name: string
+                /** @example 2026-01-27T12:00:00.000Z */
+                createdAt: string
+              }[]
+            }
+          }
+        }
+      }
+    }
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
 }
 export type webhooks = Record<string, never>
 export interface components {

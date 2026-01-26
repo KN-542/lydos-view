@@ -23,6 +23,22 @@ export function useGetMessage(message: string) {
   })
 }
 
+// GET: 媒体マスタ全取得
+export function useGetSites() {
+  return useSuspenseQuery({
+    queryKey: ['sites'],
+    queryFn: async () => {
+      const response = await client.GET('/api/sites')
+
+      if (response.error) {
+        throw new Error('媒体マスタの取得に失敗しました')
+      }
+
+      return response.data
+    },
+  })
+}
+
 // POST: メッセージ送信
 export function usePostMessage() {
   const queryClient = useQueryClient()

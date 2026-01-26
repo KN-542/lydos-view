@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { Suspense, useState } from 'react'
-import { useGetMessage, usePostMessage } from '../../../hooks/useMessage'
+import { useGetMessage, useGetSites, usePostMessage } from '../../../hooks/useMessage'
 import { cn } from '../../../lib/utils'
 
 export const Route = createFileRoute('/test/sample/')({
@@ -41,6 +41,38 @@ function MessageResponse({ message }: { message: string }) {
             </li>
           </ul>
         </div>
+      </div>
+    </div>
+  )
+}
+
+// 媒体一覧表示コンポーネント（Suspense対象）
+function SitesResponse() {
+  const { data: sitesData } = useGetSites()
+
+  return (
+    <div className="mt-4 rounded-lg border border-purple-200 bg-purple-50 p-4">
+      <h3 className="text-lg font-semibold text-purple-900">媒体一覧</h3>
+      <div className="mt-3">
+        <ul className="space-y-2">
+          {sitesData.sites.map((site) => (
+            <li key={site.id} className="rounded bg-purple-100 p-3">
+              <div className="flex items-center justify-between">
+                <span className="font-medium text-purple-900">
+                  {site.id}. {site.name}
+                </span>
+                <span className="text-xs text-purple-700">
+                  {new Date(site.createdAt).toLocaleString('ja-JP')}
+                </span>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div className="mt-3 rounded bg-purple-100 p-2">
+        <p className="text-xs text-purple-700">
+          ✓ useSuspenseQueryで自動実行・キャッシュされています
+        </p>
       </div>
     </div>
   )
@@ -161,6 +193,30 @@ function TestPage() {
               </div>
             </div>
           )}
+        </div>
+
+        {/* 媒体一覧 */}
+        <div className="rounded-lg bg-white p-8 shadow-xl">
+          <div className="flex items-center justify-between">
+            <h2 className="text-2xl font-bold text-gray-900">GET /api/sites</h2>
+            <span className="rounded-full bg-green-100 px-3 py-1 text-sm font-semibold text-green-800">
+              GET
+            </span>
+          </div>
+          <p className="mt-2 text-gray-600">媒体マスタを全件取得します（初回自動実行）</p>
+
+          <Suspense
+            fallback={
+              <div className="mt-4 rounded-lg border border-purple-200 bg-purple-50 p-4">
+                <div className="flex items-center gap-3">
+                  <div className="h-6 w-6 animate-spin rounded-full border-3 border-purple-600 border-t-transparent" />
+                  <span className="font-semibold text-purple-900">読み込み中...</span>
+                </div>
+              </div>
+            }
+          >
+            <SitesResponse />
+          </Suspense>
         </div>
 
         {/* 説明 */}
