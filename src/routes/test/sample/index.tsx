@@ -176,8 +176,10 @@ function TestPage() {
             </p>
             <ul className="ml-6 list-disc space-y-1">
               <li>
-                <code className="rounded bg-gray-200 px-2 py-1 font-mono text-xs">useSuspenseQuery</code> -
-                GET APIを自動実行・キャッシュ管理
+                <code className="rounded bg-gray-200 px-2 py-1 font-mono text-xs">
+                  useSuspenseQuery
+                </code>{' '}
+                - GET APIを自動実行・キャッシュ管理
               </li>
               <li>
                 <code className="rounded bg-gray-200 px-2 py-1 font-mono text-xs">useMutation</code>{' '}
