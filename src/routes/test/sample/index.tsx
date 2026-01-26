@@ -46,7 +46,7 @@ function MessageResponse({ message }: { message: string }) {
   )
 }
 
-// 媒体一覧表示コンポーネント（Suspense対象）
+// 媒体一覧表示コンポーネント
 function SitesResponse() {
   const { data: sitesData } = useGetSites()
 
