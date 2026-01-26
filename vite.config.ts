@@ -1,13 +1,13 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
+import { tanstackRouter } from '@tanstack/router-plugin/vite'
 import fs from 'fs'
 import path from 'path'
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
-    TanStackRouterVite(),
+    tanstackRouter(),
     react({
       babel: {
         plugins: [['babel-plugin-react-compiler']],
@@ -15,8 +15,9 @@ export default defineConfig({
     }),
   ],
   server: {
-    host: '0.0.0.0',  // すべてのネットワークインターフェースでlisten（Dockerから接続可能に）
+    host: '127.0.0.1',
     port: 5173,
+    strictPort: true,
     https: (() => {
       const certPath = path.resolve(__dirname, '../lydos-setup/certs/localhost.pem')
       const keyPath = path.resolve(__dirname, '../lydos-setup/certs/localhost-key.pem')
@@ -28,14 +29,12 @@ export default defineConfig({
           key: fs.readFileSync(keyPath),
         }
       }
-      return false
+      return undefined
     })(),
-    proxy: {
-      '/api': {
-        target: 'http://localhost:3001',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ''),
-      },
+    hmr: {
+      protocol: 'wss',
+      host: 'local.lydos',
+      clientPort: 443,
     },
   },
 })
