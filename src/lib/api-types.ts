@@ -44,8 +44,8 @@ export interface paths {
     }
     put?: never
     /**
-     * メッセージエコー
-     * @description 送信されたメッセージをそのまま返します
+     * メッセージ保存
+     * @description 送信されたメッセージをRedisに保存します
      */
     post: {
       parameters: {
@@ -70,10 +70,10 @@ export interface paths {
           }
           content: {
             'application/json': {
-              /** @example Hello, Lydos! */
+              /** @example true */
+              success: boolean
+              /** @example メッセージを保存しました */
               message: string
-              /** @example 2026-01-27T12:00:00.000Z */
-              timestamp: string
             }
           }
         }

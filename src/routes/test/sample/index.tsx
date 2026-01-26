@@ -148,16 +148,16 @@ function TestPage() {
               <h3 className="text-lg font-semibold text-blue-900">レスポンス</h3>
               <div className="mt-3 space-y-2">
                 <div>
+                  <span className="font-medium text-blue-800">ステータス: </span>
+                  <span className="text-blue-700">{postData.success ? '✓ 成功' : '✗ 失敗'}</span>
+                </div>
+                <div>
                   <span className="font-medium text-blue-800">メッセージ: </span>
                   <span className="text-blue-700">{postData.message}</span>
                 </div>
-                <div>
-                  <span className="font-medium text-blue-800">タイムスタンプ: </span>
-                  <span className="font-mono text-sm text-blue-700">{postData.timestamp}</span>
-                </div>
               </div>
               <div className="mt-3 rounded bg-blue-100 p-2">
-                <p className="text-xs text-blue-700">✓ useMutationで実行・キャッシュされています</p>
+                <p className="text-xs text-blue-700">✓ useMutationで実行・Redisに保存されました</p>
               </div>
             </div>
           )}

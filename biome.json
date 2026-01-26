@@ -21,6 +21,12 @@
       "linter": {
         "enabled": false
       }
+    },
+    {
+      "includes": ["src/lib/openapi.json"],
+      "linter": {
+        "enabled": false
+      }
     }
   ],
   "formatter": {
