@@ -58,7 +58,6 @@ export function usePostMessage() {
       return response.data
     },
     onSuccess: (data) => {
-      // 成功時にキャッシュを更新
       if (data) {
         queryClient.setQueryData(['message', 'post', data.message], data)
       }
