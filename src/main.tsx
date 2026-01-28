@@ -1,3 +1,4 @@
+import { ClerkProvider } from '@clerk/clerk-react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { createRouter, RouterProvider } from '@tanstack/react-router'
 import { StrictMode } from 'react'
@@ -32,10 +33,24 @@ if (!rootElement) {
   throw new Error('Root element not found')
 }
 
+const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
+
+if (!PUBLISHABLE_KEY) {
+  throw new Error('Add your Clerk publishable key to the .env file')
+}
+
 createRoot(rootElement).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
+      <ClerkProvider
+        publishableKey={PUBLISHABLE_KEY}
+        signInFallbackRedirectUrl="/home"
+        signUpFallbackRedirectUrl="/home"
+        signInForceRedirectUrl="/home"
+        signUpForceRedirectUrl="/home"
+      >
+        <RouterProvider router={router} />
+      </ClerkProvider>
     </QueryClientProvider>
   </StrictMode>
 )
