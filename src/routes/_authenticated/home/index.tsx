@@ -1,11 +1,11 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { cn } from '../../lib/utils'
+import { cn } from '../../../lib/utils'
 
-export const Route = createFileRoute('/test/')({
-  component: TestIndex,
+export const Route = createFileRoute('/_authenticated/home/')({
+  component: HomeIndex,
 })
 
-function TestIndex() {
+function HomeIndex() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-100">
       <div className="container mx-auto px-4 py-16">
@@ -19,7 +19,7 @@ function TestIndex() {
 
           <div className="mt-12 grid gap-6 sm:grid-cols-2">
             <Link
-              to="/test/sample"
+              to="/home/sample"
               className={cn(
                 'group rounded-lg bg-white p-8 shadow-lg transition-all hover:shadow-xl',
                 'border-2 border-transparent hover:border-indigo-500'

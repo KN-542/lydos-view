@@ -9,58 +9,76 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as TestIndexRouteImport } from './routes/test/index'
-import { Route as TestSampleIndexRouteImport } from './routes/test/sample/index'
+import { Route as AuthenticatedHomeIndexRouteImport } from './routes/_authenticated/home/index'
+import { Route as AuthenticatedHomeSampleIndexRouteImport } from './routes/_authenticated/home/sample/index'
 
+const AuthenticatedRoute = AuthenticatedRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const TestIndexRoute = TestIndexRouteImport.update({
-  id: '/test/',
-  path: '/test/',
-  getParentRoute: () => rootRouteImport,
+const AuthenticatedHomeIndexRoute = AuthenticatedHomeIndexRouteImport.update({
+  id: '/home/',
+  path: '/home/',
+  getParentRoute: () => AuthenticatedRoute,
 } as any)
-const TestSampleIndexRoute = TestSampleIndexRouteImport.update({
-  id: '/test/sample/',
-  path: '/test/sample/',
-  getParentRoute: () => rootRouteImport,
-} as any)
+const AuthenticatedHomeSampleIndexRoute =
+  AuthenticatedHomeSampleIndexRouteImport.update({
+    id: '/home/sample/',
+    path: '/home/sample/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/test/': typeof TestIndexRoute
-  '/test/sample/': typeof TestSampleIndexRoute
+  '/home/': typeof AuthenticatedHomeIndexRoute
+  '/home/sample/': typeof AuthenticatedHomeSampleIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/test': typeof TestIndexRoute
-  '/test/sample': typeof TestSampleIndexRoute
+  '/home': typeof AuthenticatedHomeIndexRoute
+  '/home/sample': typeof AuthenticatedHomeSampleIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/test/': typeof TestIndexRoute
-  '/test/sample/': typeof TestSampleIndexRoute
+  '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/_authenticated/home/': typeof AuthenticatedHomeIndexRoute
+  '/_authenticated/home/sample/': typeof AuthenticatedHomeSampleIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/test/' | '/test/sample/'
+  fullPaths: '/' | '/home/' | '/home/sample/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/test' | '/test/sample'
-  id: '__root__' | '/' | '/test/' | '/test/sample/'
+  to: '/' | '/home' | '/home/sample'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/_authenticated/home/'
+    | '/_authenticated/home/sample/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  TestIndexRoute: typeof TestIndexRoute
-  TestSampleIndexRoute: typeof TestSampleIndexRoute
+  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -68,27 +86,40 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/test/': {
-      id: '/test/'
-      path: '/test'
-      fullPath: '/test/'
-      preLoaderRoute: typeof TestIndexRouteImport
-      parentRoute: typeof rootRouteImport
+    '/_authenticated/home/': {
+      id: '/_authenticated/home/'
+      path: '/home'
+      fullPath: '/home/'
+      preLoaderRoute: typeof AuthenticatedHomeIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/test/sample/': {
-      id: '/test/sample/'
-      path: '/test/sample'
-      fullPath: '/test/sample/'
-      preLoaderRoute: typeof TestSampleIndexRouteImport
-      parentRoute: typeof rootRouteImport
+    '/_authenticated/home/sample/': {
+      id: '/_authenticated/home/sample/'
+      path: '/home/sample'
+      fullPath: '/home/sample/'
+      preLoaderRoute: typeof AuthenticatedHomeSampleIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
   }
 }
 
+interface AuthenticatedRouteChildren {
+  AuthenticatedHomeIndexRoute: typeof AuthenticatedHomeIndexRoute
+  AuthenticatedHomeSampleIndexRoute: typeof AuthenticatedHomeSampleIndexRoute
+}
+
+const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedHomeIndexRoute: AuthenticatedHomeIndexRoute,
+  AuthenticatedHomeSampleIndexRoute: AuthenticatedHomeSampleIndexRoute,
+}
+
+const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
+  AuthenticatedRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  TestIndexRoute: TestIndexRoute,
-  TestSampleIndexRoute: TestSampleIndexRoute,
+  AuthenticatedRoute: AuthenticatedRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
