@@ -28,11 +28,12 @@ const AuthenticatedHomeIndexRoute = AuthenticatedHomeIndexRouteImport.update({
   path: '/home/',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
-const AuthenticatedHomeSampleIndexRoute = AuthenticatedHomeSampleIndexRouteImport.update({
-  id: '/home/sample/',
-  path: '/home/sample/',
-  getParentRoute: () => AuthenticatedRoute,
-} as any)
+const AuthenticatedHomeSampleIndexRoute =
+  AuthenticatedHomeSampleIndexRouteImport.update({
+    id: '/home/sample/',
+    path: '/home/sample/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -113,7 +114,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
-  AuthenticatedRouteChildren
+  AuthenticatedRouteChildren,
 )
 
 const rootRouteChildren: RootRouteChildren = {

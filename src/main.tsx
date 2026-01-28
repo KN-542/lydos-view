@@ -1,4 +1,5 @@
 import { ClerkProvider } from '@clerk/clerk-react'
+import { jaJP } from '@clerk/localizations'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { createRouter, RouterProvider } from '@tanstack/react-router'
 import { StrictMode } from 'react'
@@ -48,6 +49,7 @@ createRoot(rootElement).render(
         signUpFallbackRedirectUrl="/home"
         signInForceRedirectUrl="/home"
         signUpForceRedirectUrl="/home"
+        localization={jaJP}
       >
         <RouterProvider router={router} />
       </ClerkProvider>
