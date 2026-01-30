@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { Suspense, useState } from 'react'
-import { useGetMessage, useGetSites, usePostMessage } from '../../../../hooks/useMessage'
+import { useGetMessage, useGetPlans, usePostMessage } from '../../../../hooks/useMessage'
 import { cn } from '../../../../lib/utils'
 
 export const Route = createFileRoute('/_authenticated/home/sample/')({
@@ -46,23 +46,26 @@ function MessageResponse({ message }: { message: string }) {
   )
 }
 
-// 媒体一覧表示コンポーネント
-function SitesResponse() {
-  const { data: sitesData } = useGetSites()
+// プラン一覧表示コンポーネント
+function PlansResponse() {
+  const { data: plansData } = useGetPlans()
 
   return (
     <div className="mt-4 rounded-lg border border-purple-200 bg-purple-50 p-4">
-      <h3 className="text-lg font-semibold text-purple-900">媒体一覧</h3>
+      <h3 className="text-lg font-semibold text-purple-900">プラン一覧</h3>
       <div className="mt-3">
         <ul className="space-y-2">
-          {sitesData.sites.map((site) => (
-            <li key={site.id} className="rounded bg-purple-100 p-3">
-              <div className="flex items-center justify-between">
-                <span className="font-medium text-purple-900">
-                  {site.id}. {site.name}
-                </span>
-                <span className="text-xs text-purple-700">
-                  {new Date(site.createdAt).toLocaleString('ja-JP')}
+          {plansData.plans.map((plan) => (
+            <li key={plan.id} className="rounded bg-purple-100 p-3">
+              <div className="flex items-start justify-between">
+                <div className="flex-1">
+                  <div className="font-medium text-purple-900">
+                    {plan.id}. {plan.name}
+                  </div>
+                  <div className="mt-1 text-sm text-purple-700">{plan.description}</div>
+                </div>
+                <span className="ml-4 text-lg font-bold text-purple-900">
+                  ¥{plan.price.toLocaleString()}
                 </span>
               </div>
             </li>
@@ -195,15 +198,15 @@ function TestPage() {
           )}
         </div>
 
-        {/* 媒体一覧 */}
+        {/* プラン一覧 */}
         <div className="rounded-lg bg-white p-8 shadow-xl">
           <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-bold text-gray-900">GET /api/sites</h2>
+            <h2 className="text-2xl font-bold text-gray-900">GET /setting/plans</h2>
             <span className="rounded-full bg-green-100 px-3 py-1 text-sm font-semibold text-green-800">
               GET
             </span>
           </div>
-          <p className="mt-2 text-gray-600">媒体マスタを全件取得します（初回自動実行）</p>
+          <p className="mt-2 text-gray-600">利用可能なプラン一覧を取得します（初回自動実行）</p>
 
           <Suspense
             fallback={
@@ -215,7 +218,7 @@ function TestPage() {
               </div>
             }
           >
-            <SitesResponse />
+            <PlansResponse />
           </Suspense>
         </div>
 
