@@ -4,145 +4,146 @@
  */
 
 export interface paths {
-  '/api/message': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * メッセージ取得
-     * @description クエリパラメータのメッセージをエコーします
-     */
-    get: {
-      parameters: {
-        query?: {
-          message?: string
-        }
-        header?: never
-        path?: never
-        cookie?: never
-      }
-      requestBody?: never
-      responses: {
-        /** @description Success */
-        200: {
-          headers: {
-            [name: string]: unknown
-          }
-          content: {
-            'application/json': {
-              /** @example Hello, Lydos! */
-              message: string
-              /** @example 2026-01-27T12:00:00.000Z */
-              timestamp: string
-            }
-          }
-        }
-      }
-    }
-    put?: never
-    /**
-     * メッセージ保存
-     * @description 送信されたメッセージをRedisに保存します
-     */
-    post: {
-      parameters: {
-        query?: never
-        header?: never
-        path?: never
-        cookie?: never
-      }
-      requestBody?: {
-        content: {
-          'application/json': {
-            /** @example Hello, Lydos! */
-            message: string
-          }
-        }
-      }
-      responses: {
-        /** @description Success */
-        200: {
-          headers: {
-            [name: string]: unknown
-          }
-          content: {
-            'application/json': {
-              /** @example true */
-              success: boolean
-              /** @example メッセージを保存しました */
-              message: string
-            }
-          }
-        }
-      }
-    }
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/sites': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * 媒体マスタ全取得
-     * @description 媒体マスタ（m_site）の全データを取得します
-     */
-    get: {
-      parameters: {
-        query?: never
-        header?: never
-        path?: never
-        cookie?: never
-      }
-      requestBody?: never
-      responses: {
-        /** @description Success */
-        200: {
-          headers: {
-            [name: string]: unknown
-          }
-          content: {
-            'application/json': {
-              /** @example [] */
-              sites: {
-                /** @example 1 */
-                id: number
-                /** @example リクナビNEXT */
-                name: string
-                /** @example 2026-01-27T12:00:00.000Z */
-                createdAt: string
-              }[]
-            }
-          }
-        }
-      }
-    }
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    "/setting/plans": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * プラン一覧取得
+         * @description 利用可能なプラン一覧を取得します
+         */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            plans: {
+                                /** @example 1 */
+                                id: number;
+                                /** @example 無料プラン */
+                                name: string;
+                                /** @example 基本的な機能が利用できます */
+                                description: string;
+                                /** @example 0 */
+                                price: number;
+                            }[];
+                        };
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/message": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * メッセージ取得
+         * @description クエリパラメータのメッセージをエコーします
+         */
+        get: {
+            parameters: {
+                query?: {
+                    message?: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            /** @example Hello, Lydos! */
+                            message: string;
+                            /** @example 2026-01-27T12:00:00.000Z */
+                            timestamp: string;
+                        };
+                    };
+                };
+            };
+        };
+        put?: never;
+        /**
+         * メッセージ保存
+         * @description 送信されたメッセージをRedisに保存します
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": {
+                        /** @example Hello, Lydos! */
+                        message: string;
+                    };
+                };
+            };
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            /** @example true */
+                            success: boolean;
+                            /** @example メッセージを保存しました */
+                            message: string;
+                        };
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
-export type webhooks = Record<string, never>
+export type webhooks = Record<string, never>;
 export interface components {
-  schemas: never
-  responses: never
-  parameters: never
-  requestBodies: never
-  headers: never
-  pathItems: never
+    schemas: never;
+    responses: never;
+    parameters: never;
+    requestBodies: never;
+    headers: never;
+    pathItems: never;
 }
-export type $defs = Record<string, never>
-export type operations = Record<string, never>
+export type $defs = Record<string, never>;
+export type operations = Record<string, never>;

@@ -23,15 +23,15 @@ export function useGetMessage(message: string) {
   })
 }
 
-// GET: 媒体マスタ全取得
-export function useGetSites() {
+// GET: プラン一覧取得
+export function useGetPlans() {
   return useSuspenseQuery({
-    queryKey: ['sites'],
+    queryKey: ['plans'],
     queryFn: async () => {
-      const response = await client.GET('/api/sites')
+      const response = await client.GET('/setting/plans')
 
       if (response.error) {
-        throw new Error('媒体マスタの取得に失敗しました')
+        throw new Error('プラン一覧の取得に失敗しました')
       }
 
       return response.data
