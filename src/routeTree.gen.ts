@@ -12,7 +12,8 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedHomeIndexRouteImport } from './routes/_authenticated/home/index'
-import { Route as AuthenticatedHomeSampleIndexRouteImport } from './routes/_authenticated/home/sample/index'
+import { Route as AuthenticatedHomeSettingTestIndexRouteImport } from './routes/_authenticated/home/setting/test/index'
+import { Route as AuthenticatedHomeSettingPlanIndexRouteImport } from './routes/_authenticated/home/setting/plan/index'
 
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
   id: '/_authenticated',
@@ -28,41 +29,51 @@ const AuthenticatedHomeIndexRoute = AuthenticatedHomeIndexRouteImport.update({
   path: '/home/',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
-const AuthenticatedHomeSampleIndexRoute =
-  AuthenticatedHomeSampleIndexRouteImport.update({
-    id: '/home/sample/',
-    path: '/home/sample/',
+const AuthenticatedHomeSettingTestIndexRoute =
+  AuthenticatedHomeSettingTestIndexRouteImport.update({
+    id: '/home/setting/test/',
+    path: '/home/setting/test/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedHomeSettingPlanIndexRoute =
+  AuthenticatedHomeSettingPlanIndexRouteImport.update({
+    id: '/home/setting/plan/',
+    path: '/home/setting/plan/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/home/': typeof AuthenticatedHomeIndexRoute
-  '/home/sample/': typeof AuthenticatedHomeSampleIndexRoute
+  '/home/setting/plan/': typeof AuthenticatedHomeSettingPlanIndexRoute
+  '/home/setting/test/': typeof AuthenticatedHomeSettingTestIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/home': typeof AuthenticatedHomeIndexRoute
-  '/home/sample': typeof AuthenticatedHomeSampleIndexRoute
+  '/home/setting/plan': typeof AuthenticatedHomeSettingPlanIndexRoute
+  '/home/setting/test': typeof AuthenticatedHomeSettingTestIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/_authenticated/home/': typeof AuthenticatedHomeIndexRoute
-  '/_authenticated/home/sample/': typeof AuthenticatedHomeSampleIndexRoute
+  '/_authenticated/home/setting/plan/': typeof AuthenticatedHomeSettingPlanIndexRoute
+  '/_authenticated/home/setting/test/': typeof AuthenticatedHomeSettingTestIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/home/' | '/home/sample/'
+  fullPaths: '/' | '/home/' | '/home/setting/plan/' | '/home/setting/test/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/home' | '/home/sample'
+  to: '/' | '/home' | '/home/setting/plan' | '/home/setting/test'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/_authenticated/home/'
-    | '/_authenticated/home/sample/'
+    | '/_authenticated/home/setting/plan/'
+    | '/_authenticated/home/setting/test/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -93,11 +104,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedHomeIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/home/sample/': {
-      id: '/_authenticated/home/sample/'
-      path: '/home/sample'
-      fullPath: '/home/sample/'
-      preLoaderRoute: typeof AuthenticatedHomeSampleIndexRouteImport
+    '/_authenticated/home/setting/test/': {
+      id: '/_authenticated/home/setting/test/'
+      path: '/home/setting/test'
+      fullPath: '/home/setting/test/'
+      preLoaderRoute: typeof AuthenticatedHomeSettingTestIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/home/setting/plan/': {
+      id: '/_authenticated/home/setting/plan/'
+      path: '/home/setting/plan'
+      fullPath: '/home/setting/plan/'
+      preLoaderRoute: typeof AuthenticatedHomeSettingPlanIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
   }
@@ -105,12 +123,16 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteChildren {
   AuthenticatedHomeIndexRoute: typeof AuthenticatedHomeIndexRoute
-  AuthenticatedHomeSampleIndexRoute: typeof AuthenticatedHomeSampleIndexRoute
+  AuthenticatedHomeSettingPlanIndexRoute: typeof AuthenticatedHomeSettingPlanIndexRoute
+  AuthenticatedHomeSettingTestIndexRoute: typeof AuthenticatedHomeSettingTestIndexRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedHomeIndexRoute: AuthenticatedHomeIndexRoute,
-  AuthenticatedHomeSampleIndexRoute: AuthenticatedHomeSampleIndexRoute,
+  AuthenticatedHomeSettingPlanIndexRoute:
+    AuthenticatedHomeSettingPlanIndexRoute,
+  AuthenticatedHomeSettingTestIndexRoute:
+    AuthenticatedHomeSettingTestIndexRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(

@@ -1,9 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { Suspense, useState } from 'react'
-import { useGetMessage, useGetPlans, usePostMessage } from '../../../../hooks/useMessage'
-import { cn } from '../../../../lib/utils'
+import { useGetMessage, useGetPlans, usePostMessage } from '../../../../../hooks/useMessage'
+import { cn } from '../../../../../lib/utils'
 
-export const Route = createFileRoute('/_authenticated/home/sample/')({
+export const Route = createFileRoute('/_authenticated/home/setting/test/')({
   component: TestPage,
 })
 

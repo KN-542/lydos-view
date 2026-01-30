@@ -15,9 +15,9 @@ function RootComponent() {
       {/* ルートパス以外で共通ヘッダーを表示 */}
       {!isRootPath && (
         <SignedIn>
-          <header className={cn('bg-white shadow-sm border-b')}>
+          <header className={cn('bg-gray-50 border-b border-gray-200')}>
             <div className={cn('container mx-auto px-4 py-4 flex items-center justify-between')}>
-              <h1 className={cn('text-xl font-bold text-indigo-600')}>Lydos</h1>
+              <h1 className={cn('text-xl font-bold text-gray-900')}>Lydos</h1>
               <UserButton userProfileMode="modal" signInUrl="/" />
             </div>
           </header>
