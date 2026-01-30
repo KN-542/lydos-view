@@ -27,78 +27,14 @@
                             "type": "string",
                             "example": "基本的な機能が利用できます"
                           },
-                          "price": { "type": "number", "example": 0 }
+                          "price": { "type": "number", "example": 0 },
+                          "isSelected": { "type": "boolean", "example": false }
                         },
-                        "required": ["id", "name", "description", "price"]
+                        "required": ["id", "name", "description", "price", "isSelected"]
                       }
                     }
                   },
                   "required": ["plans"]
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/message": {
-      "get": {
-        "tags": ["Message"],
-        "summary": "メッセージ取得",
-        "description": "クエリパラメータのメッセージをエコーします",
-        "parameters": [
-          {
-            "schema": { "type": "string", "example": "こんにちは" },
-            "required": false,
-            "name": "message",
-            "in": "query"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": { "type": "string", "example": "Hello, Lydos!" },
-                    "timestamp": { "type": "string", "example": "2026-01-27T12:00:00.000Z" }
-                  },
-                  "required": ["message", "timestamp"]
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": ["Message"],
-        "summary": "メッセージ保存",
-        "description": "送信されたメッセージをRedisに保存します",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": { "message": { "type": "string", "example": "Hello, Lydos!" } },
-                "required": ["message"]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": { "type": "boolean", "example": true },
-                    "message": { "type": "string", "example": "メッセージを保存しました" }
-                  },
-                  "required": ["success", "message"]
                 }
               }
             }

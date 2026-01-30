@@ -40,6 +40,8 @@ export interface paths {
                 description: string
                 /** @example 0 */
                 price: number
+                /** @example false */
+                isSelected: boolean
               }[]
             }
           }
@@ -48,87 +50,6 @@ export interface paths {
     }
     put?: never
     post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/message': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * メッセージ取得
-     * @description クエリパラメータのメッセージをエコーします
-     */
-    get: {
-      parameters: {
-        query?: {
-          message?: string
-        }
-        header?: never
-        path?: never
-        cookie?: never
-      }
-      requestBody?: never
-      responses: {
-        /** @description Success */
-        200: {
-          headers: {
-            [name: string]: unknown
-          }
-          content: {
-            'application/json': {
-              /** @example Hello, Lydos! */
-              message: string
-              /** @example 2026-01-27T12:00:00.000Z */
-              timestamp: string
-            }
-          }
-        }
-      }
-    }
-    put?: never
-    /**
-     * メッセージ保存
-     * @description 送信されたメッセージをRedisに保存します
-     */
-    post: {
-      parameters: {
-        query?: never
-        header?: never
-        path?: never
-        cookie?: never
-      }
-      requestBody?: {
-        content: {
-          'application/json': {
-            /** @example Hello, Lydos! */
-            message: string
-          }
-        }
-      }
-      responses: {
-        /** @description Success */
-        200: {
-          headers: {
-            [name: string]: unknown
-          }
-          content: {
-            'application/json': {
-              /** @example true */
-              success: boolean
-              /** @example メッセージを保存しました */
-              message: string
-            }
-          }
-        }
-      }
-    }
     delete?: never
     options?: never
     head?: never

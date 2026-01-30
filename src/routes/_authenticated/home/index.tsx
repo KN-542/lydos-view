@@ -56,7 +56,7 @@ function ChatPage() {
       const newChatId = Date.now().toString()
       const newChat: ChatHistory = {
         id: newChatId,
-        title: prompt.length > 20 ? prompt.slice(0, 20) + '...' : prompt,
+        title: prompt.length > 20 ? `${prompt.slice(0, 20)}...` : prompt,
         lastMessage: new Date(),
       }
       setChatHistories([newChat, ...chatHistories])
@@ -169,15 +169,6 @@ function ChatPage() {
                     )}
                   >
                     プラン変更
-                  </Link>
-                  <Link
-                    to="/home/setting/test"
-                    className={cn(
-                      'block px-4 py-3 text-sm text-gray-700',
-                      'hover:bg-gray-100 transition-colors border-t border-gray-200'
-                    )}
-                  >
-                    API通信テスト
                   </Link>
                 </div>
               )}

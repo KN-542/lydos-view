@@ -16,7 +16,7 @@ function RootComponent() {
       {!isRootPath && (
         <SignedIn>
           <header className={cn('bg-gray-50 border-b border-gray-200')}>
-            <div className={cn('container mx-auto px-4 py-4 flex items-center justify-between')}>
+            <div className={cn('px-4 py-4 flex items-center justify-between')}>
               <h1 className={cn('text-xl font-bold text-gray-900')}>Lydos</h1>
               <UserButton userProfileMode="modal" signInUrl="/" />
             </div>

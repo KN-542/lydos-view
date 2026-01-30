@@ -1,5 +1,5 @@
 import { createFileRoute, Outlet } from '@tanstack/react-router'
-import { useRequireAuth } from '../hooks/useRequireAuth'
+import { useRequireAuth } from '../hook/useRequireAuth'
 
 export const Route = createFileRoute('/_authenticated')({
   component: AuthenticatedLayout,
