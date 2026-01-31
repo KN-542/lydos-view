@@ -15,9 +15,6 @@ interface LeftMenuProps {
   description?: string
 }
 
-/**
- * @package
- */
 export function LeftMenu({ children, title, description }: LeftMenuProps) {
   const router = useRouterState()
   const currentPath = router.location.pathname

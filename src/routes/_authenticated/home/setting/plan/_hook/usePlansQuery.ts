@@ -3,7 +3,6 @@ import { client } from '../../../../../../lib/api'
 
 /**
  * GET: プラン一覧取得
- * @package
  */
 export function usePlansQuery() {
   return useSuspenseQuery({
