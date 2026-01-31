@@ -7,7 +7,10 @@ interface SettingMenuItem {
   path: string
 }
 
-const menuItems: SettingMenuItem[] = [{ title: 'プラン変更', path: '/home/setting/plan' }]
+const menuItems: SettingMenuItem[] = [
+  { title: 'プラン変更', path: '/home/setting/plan' },
+  { title: 'お支払い方法', path: '/home/setting/payment' },
+]
 
 interface LeftMenuProps {
   children: ReactNode

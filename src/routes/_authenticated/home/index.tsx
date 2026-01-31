@@ -170,6 +170,15 @@ function ChatPage() {
                   >
                     プラン変更
                   </Link>
+                  <Link
+                    to="/home/setting/payment"
+                    className={cn(
+                      'block px-4 py-3 text-sm text-gray-700',
+                      'hover:bg-gray-100 transition-colors'
+                    )}
+                  >
+                    お支払い方法
+                  </Link>
                 </div>
               )}
             </div>

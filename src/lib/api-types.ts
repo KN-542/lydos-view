@@ -46,6 +46,134 @@ export interface paths {
             }
           }
         }
+        /** @description Internal Server Error */
+        500: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': {
+              error: string
+            }
+          }
+        }
+      }
+    }
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/setting/checkout-session': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Checkout Session作成
+     * @description カード登録用のCheckout Sessionを作成します。
+     */
+    post: {
+      parameters: {
+        query?: never
+        header?: never
+        path?: never
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description Success */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': {
+              /** @description Stripe Checkout Session URL */
+              checkoutUrl: string
+            }
+          }
+        }
+        /** @description Internal Server Error */
+        500: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': {
+              error: string
+            }
+          }
+        }
+      }
+    }
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/setting/payment-methods': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * 支払い方法一覧取得
+     * @description 登録済みの支払い方法一覧を取得します。
+     */
+    get: {
+      parameters: {
+        query?: never
+        header?: never
+        path?: never
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description Success */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': {
+              /** @description List of payment methods */
+              paymentMethods: {
+                /** @description Payment Method ID */
+                id: string
+                /** @description Card brand (visa, mastercard, etc.) */
+                brand: string
+                /** @description Last 4 digits of card */
+                last4: string
+                /** @description Expiration month */
+                expMonth: number
+                /** @description Expiration year */
+                expYear: number
+              }[]
+            }
+          }
+        }
+        /** @description Internal Server Error */
+        500: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': {
+              error: string
+            }
+          }
+        }
       }
     }
     put?: never
