@@ -9,11 +9,17 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SignUpRouteImport } from './routes/sign-up'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedHomeIndexRouteImport } from './routes/_authenticated/home/index'
 import { Route as AuthenticatedHomeSettingPlanIndexRouteImport } from './routes/_authenticated/home/setting/plan/index'
 
+const SignUpRoute = SignUpRouteImport.update({
+  id: '/sign-up',
+  path: '/sign-up',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
@@ -37,11 +43,13 @@ const AuthenticatedHomeSettingPlanIndexRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/sign-up': typeof SignUpRoute
   '/home/': typeof AuthenticatedHomeIndexRoute
   '/home/setting/plan/': typeof AuthenticatedHomeSettingPlanIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/sign-up': typeof SignUpRoute
   '/home': typeof AuthenticatedHomeIndexRoute
   '/home/setting/plan': typeof AuthenticatedHomeSettingPlanIndexRoute
 }
@@ -49,18 +57,20 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/sign-up': typeof SignUpRoute
   '/_authenticated/home/': typeof AuthenticatedHomeIndexRoute
   '/_authenticated/home/setting/plan/': typeof AuthenticatedHomeSettingPlanIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/home/' | '/home/setting/plan/'
+  fullPaths: '/' | '/sign-up' | '/home/' | '/home/setting/plan/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/home' | '/home/setting/plan'
+  to: '/' | '/sign-up' | '/home' | '/home/setting/plan'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
+    | '/sign-up'
     | '/_authenticated/home/'
     | '/_authenticated/home/setting/plan/'
   fileRoutesById: FileRoutesById
@@ -68,10 +78,18 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
+  SignUpRoute: typeof SignUpRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/sign-up': {
+      id: '/sign-up'
+      path: '/sign-up'
+      fullPath: '/sign-up'
+      preLoaderRoute: typeof SignUpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated': {
       id: '/_authenticated'
       path: ''
@@ -121,6 +139,7 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
+  SignUpRoute: SignUpRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
