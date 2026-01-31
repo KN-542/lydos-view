@@ -14,6 +14,8 @@ import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedHomeIndexRouteImport } from './routes/_authenticated/home/index'
 import { Route as AuthenticatedHomeSettingPlanIndexRouteImport } from './routes/_authenticated/home/setting/plan/index'
+import { Route as AuthenticatedHomeSettingPaymentIndexRouteImport } from './routes/_authenticated/home/setting/payment/index'
+import { Route as AuthenticatedHomeSettingPaymentSuccessRouteImport } from './routes/_authenticated/home/setting/payment/success'
 
 const SignUpRoute = SignUpRouteImport.update({
   id: '/sign-up',
@@ -40,17 +42,33 @@ const AuthenticatedHomeSettingPlanIndexRoute =
     path: '/home/setting/plan/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedHomeSettingPaymentIndexRoute =
+  AuthenticatedHomeSettingPaymentIndexRouteImport.update({
+    id: '/home/setting/payment/',
+    path: '/home/setting/payment/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedHomeSettingPaymentSuccessRoute =
+  AuthenticatedHomeSettingPaymentSuccessRouteImport.update({
+    id: '/home/setting/payment/success',
+    path: '/home/setting/payment/success',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/sign-up': typeof SignUpRoute
   '/home/': typeof AuthenticatedHomeIndexRoute
+  '/home/setting/payment/success': typeof AuthenticatedHomeSettingPaymentSuccessRoute
+  '/home/setting/payment/': typeof AuthenticatedHomeSettingPaymentIndexRoute
   '/home/setting/plan/': typeof AuthenticatedHomeSettingPlanIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/sign-up': typeof SignUpRoute
   '/home': typeof AuthenticatedHomeIndexRoute
+  '/home/setting/payment/success': typeof AuthenticatedHomeSettingPaymentSuccessRoute
+  '/home/setting/payment': typeof AuthenticatedHomeSettingPaymentIndexRoute
   '/home/setting/plan': typeof AuthenticatedHomeSettingPlanIndexRoute
 }
 export interface FileRoutesById {
@@ -59,19 +77,35 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/sign-up': typeof SignUpRoute
   '/_authenticated/home/': typeof AuthenticatedHomeIndexRoute
+  '/_authenticated/home/setting/payment/success': typeof AuthenticatedHomeSettingPaymentSuccessRoute
+  '/_authenticated/home/setting/payment/': typeof AuthenticatedHomeSettingPaymentIndexRoute
   '/_authenticated/home/setting/plan/': typeof AuthenticatedHomeSettingPlanIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/sign-up' | '/home/' | '/home/setting/plan/'
+  fullPaths:
+    | '/'
+    | '/sign-up'
+    | '/home/'
+    | '/home/setting/payment/success'
+    | '/home/setting/payment/'
+    | '/home/setting/plan/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/sign-up' | '/home' | '/home/setting/plan'
+  to:
+    | '/'
+    | '/sign-up'
+    | '/home'
+    | '/home/setting/payment/success'
+    | '/home/setting/payment'
+    | '/home/setting/plan'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/sign-up'
     | '/_authenticated/home/'
+    | '/_authenticated/home/setting/payment/success'
+    | '/_authenticated/home/setting/payment/'
     | '/_authenticated/home/setting/plan/'
   fileRoutesById: FileRoutesById
 }
@@ -118,16 +152,36 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedHomeSettingPlanIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/home/setting/payment/': {
+      id: '/_authenticated/home/setting/payment/'
+      path: '/home/setting/payment'
+      fullPath: '/home/setting/payment/'
+      preLoaderRoute: typeof AuthenticatedHomeSettingPaymentIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/home/setting/payment/success': {
+      id: '/_authenticated/home/setting/payment/success'
+      path: '/home/setting/payment/success'
+      fullPath: '/home/setting/payment/success'
+      preLoaderRoute: typeof AuthenticatedHomeSettingPaymentSuccessRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 
 interface AuthenticatedRouteChildren {
   AuthenticatedHomeIndexRoute: typeof AuthenticatedHomeIndexRoute
+  AuthenticatedHomeSettingPaymentSuccessRoute: typeof AuthenticatedHomeSettingPaymentSuccessRoute
+  AuthenticatedHomeSettingPaymentIndexRoute: typeof AuthenticatedHomeSettingPaymentIndexRoute
   AuthenticatedHomeSettingPlanIndexRoute: typeof AuthenticatedHomeSettingPlanIndexRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedHomeIndexRoute: AuthenticatedHomeIndexRoute,
+  AuthenticatedHomeSettingPaymentSuccessRoute:
+    AuthenticatedHomeSettingPaymentSuccessRoute,
+  AuthenticatedHomeSettingPaymentIndexRoute:
+    AuthenticatedHomeSettingPaymentIndexRoute,
   AuthenticatedHomeSettingPlanIndexRoute:
     AuthenticatedHomeSettingPlanIndexRoute,
 }

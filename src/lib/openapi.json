@@ -38,6 +38,108 @@
                 }
               }
             }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": { "error": { "type": "string" } },
+                  "required": ["error"]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/setting/checkout-session": {
+      "post": {
+        "tags": ["設定"],
+        "summary": "Checkout Session作成",
+        "description": "カード登録用のCheckout Sessionを作成します。",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "checkoutUrl": {
+                      "type": "string",
+                      "description": "Stripe Checkout Session URL"
+                    }
+                  },
+                  "required": ["checkoutUrl"]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": { "error": { "type": "string" } },
+                  "required": ["error"]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/setting/payment-methods": {
+      "get": {
+        "tags": ["設定"],
+        "summary": "支払い方法一覧取得",
+        "description": "登録済みの支払い方法一覧を取得します。",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "paymentMethods": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": { "type": "string", "description": "Payment Method ID" },
+                          "brand": {
+                            "type": "string",
+                            "description": "Card brand (visa, mastercard, etc.)"
+                          },
+                          "last4": { "type": "string", "description": "Last 4 digits of card" },
+                          "expMonth": { "type": "number", "description": "Expiration month" },
+                          "expYear": { "type": "number", "description": "Expiration year" }
+                        },
+                        "required": ["id", "brand", "last4", "expMonth", "expYear"]
+                      },
+                      "description": "List of payment methods"
+                    }
+                  },
+                  "required": ["paymentMethods"]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": { "error": { "type": "string" } },
+                  "required": ["error"]
+                }
+              }
+            }
           }
         }
       }
