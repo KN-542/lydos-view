@@ -101,6 +101,17 @@ export interface paths {
             }
           }
         }
+        /** @description Bad Request */
+        400: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': {
+              error: string
+            }
+          }
+        }
         /** @description Internal Server Error */
         500: {
           headers: {
@@ -179,6 +190,60 @@ export interface paths {
     put?: never
     post?: never
     delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/setting/payment-methods/{paymentMethodId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Stripe Payment Method ID (pm_xxx) */
+        paymentMethodId: string
+      }
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post?: never
+    /**
+     * 支払い方法削除
+     * @description 指定した支払い方法を削除します。
+     */
+    delete: {
+      parameters: {
+        query?: never
+        header?: never
+        path: {
+          /** @description Stripe Payment Method ID (pm_xxx) */
+          paymentMethodId: string
+        }
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description No Content */
+        204: {
+          headers: {
+            [name: string]: unknown
+          }
+          content?: never
+        }
+        /** @description Internal Server Error */
+        500: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': {
+              error: string
+            }
+          }
+        }
+      }
+    }
     options?: never
     head?: never
     patch?: never

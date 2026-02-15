@@ -3,6 +3,7 @@ import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { client } from '../../../../../lib/api'
 import { LeftMenu } from '../_components/LeftMenu'
 import { useCreateCheckoutSession } from './_hook/useCreateCheckoutSession'
+import { useDeletePaymentMethod } from './_hook/useDeletePaymentMethod'
 
 export const Route = createFileRoute('/_authenticated/home/setting/payment/')({
   component: Payment,
@@ -11,6 +12,7 @@ export const Route = createFileRoute('/_authenticated/home/setting/payment/')({
 function Payment() {
   const navigate = useNavigate()
   const { mutate, isPending, error } = useCreateCheckoutSession()
+  const { mutate: deletePaymentMethod, isPending: isDeleting } = useDeletePaymentMethod()
 
   const { data } = useSuspenseQuery({
     queryKey: ['payment-methods'],
@@ -26,6 +28,7 @@ function Payment() {
   })
 
   const hasPaymentMethod = data.paymentMethods.length > 0
+  const isPaymentMethodLimitReached = data.paymentMethods.length >= 5
 
   const handleRegisterPayment = () => {
     mutate(undefined, {
@@ -44,6 +47,11 @@ function Payment() {
     })
   }
 
+  const handleDeletePaymentMethod = (paymentMethodId: string) => {
+    if (!confirm('このカードを削除しますか？')) return
+    deletePaymentMethod(paymentMethodId)
+  }
+
   return (
     <LeftMenu
       title="支払い方法の設定"
@@ -59,16 +67,29 @@ function Payment() {
             // カード登録済みの場合
             <>
               <div className="mb-6 flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-gray-900">登録カード一覧</h3>
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900">登録カード一覧</h3>
+                  <p className="mt-0.5 text-xs text-gray-500">
+                    {data.paymentMethods.length} / 5件（最大5枚まで登録できます）
+                  </p>
+                </div>
                 <button
                   type="button"
                   onClick={handleAddCard}
-                  disabled={isPending}
+                  disabled={isPending || isPaymentMethodLimitReached}
                   className="rounded-lg bg-gray-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-gray-700 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   {isPending ? '準備中...' : 'カードを追加'}
                 </button>
               </div>
+
+              {isPaymentMethodLimitReached && (
+                <div className="mb-4 rounded-md bg-yellow-50 px-4 py-3">
+                  <p className="text-sm text-yellow-800">
+                    登録上限（5枚）に達しています。新しいカードを追加するには、既存のカードを削除してください。
+                  </p>
+                </div>
+              )}
 
               <div className="space-y-4">
                 {data.paymentMethods.map((method) => (
@@ -103,6 +124,14 @@ function Payment() {
                         </p>
                       </div>
                     </div>
+                    <button
+                      type="button"
+                      onClick={() => handleDeletePaymentMethod(method.id)}
+                      disabled={isDeleting}
+                      className="rounded-lg border border-red-300 px-3 py-1.5 text-sm font-medium text-red-600 transition-colors hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                      削除
+                    </button>
                   </div>
                 ))}
               </div>
@@ -143,6 +172,7 @@ function Payment() {
                   <br />
                   ボタンをクリックすると、外部の決済ページに移動します。
                 </p>
+                <p className="mt-1 text-xs text-gray-500">最大5枚まで登録できます。</p>
               </div>
 
               {error && (
