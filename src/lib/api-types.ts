@@ -170,6 +170,8 @@ export interface paths {
                 expMonth: number
                 /** @description Expiration year */
                 expYear: number
+                /** @description Whether this is the default payment method */
+                isDefault: boolean
               }[]
             }
           }
@@ -244,6 +246,65 @@ export interface paths {
         }
       }
     }
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/setting/plan': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * プラン変更
+     * @description 支払い方法を指定してプランを変更します。
+     */
+    post: {
+      parameters: {
+        query?: never
+        header?: never
+        path?: never
+        cookie?: never
+      }
+      requestBody: {
+        content: {
+          'application/json': {
+            /** @description 変更先プラン ID */
+            planId: number
+            /** @description Stripe Payment Method ID (pm_xxx) */
+            paymentMethodId: string
+          }
+        }
+      }
+      responses: {
+        /** @description Success */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': Record<string, never>
+          }
+        }
+        /** @description Internal Server Error */
+        500: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': {
+              error: string
+            }
+          }
+        }
+      }
+    }
+    delete?: never
     options?: never
     head?: never
     patch?: never

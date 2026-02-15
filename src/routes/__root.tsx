@@ -1,5 +1,6 @@
 import { SignedIn, UserButton } from '@clerk/clerk-react'
 import { createRootRoute, Outlet, useRouterState } from '@tanstack/react-router'
+import { Toaster } from 'sonner'
 import { cn } from '../lib/utils'
 
 export const Route = createRootRoute({
@@ -24,6 +25,12 @@ function RootComponent() {
         </SignedIn>
       )}
       <Outlet />
+      <Toaster
+        richColors
+        position="top-center"
+        duration={6000}
+        style={{ '--width': '740px' } as React.CSSProperties}
+      />
     </>
   )
 }

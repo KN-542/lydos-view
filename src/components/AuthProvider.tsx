@@ -1,12 +1,12 @@
 import { useAuth } from '@clerk/clerk-react'
 import { type ReactNode, useEffect } from 'react'
-import { setToken } from '../lib/api'
+import { setTokenGetter } from '../lib/api'
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const { getToken } = useAuth()
 
   useEffect(() => {
-    getToken().then(setToken)
+    setTokenGetter(getToken)
   }, [getToken])
 
   return <>{children}</>

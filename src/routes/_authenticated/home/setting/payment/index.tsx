@@ -1,7 +1,6 @@
-import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import { client } from '../../../../../lib/api'
 import { LeftMenu } from '../_components/LeftMenu'
+import { usePaymentMethodsQuery } from '../_hook/usePaymentMethodsQuery'
 import { useCreateCheckoutSession } from './_hook/useCreateCheckoutSession'
 import { useDeletePaymentMethod } from './_hook/useDeletePaymentMethod'
 
@@ -14,18 +13,7 @@ function Payment() {
   const { mutate, isPending, error } = useCreateCheckoutSession()
   const { mutate: deletePaymentMethod, isPending: isDeleting } = useDeletePaymentMethod()
 
-  const { data } = useSuspenseQuery({
-    queryKey: ['payment-methods'],
-    queryFn: async () => {
-      const response = await client.GET('/setting/payment-methods')
-
-      if (response.error) {
-        throw new Error('支払い方法の取得に失敗しました')
-      }
-
-      return response.data
-    },
-  })
+  const { data } = usePaymentMethodsQuery()
 
   const hasPaymentMethod = data.paymentMethods.length > 0
   const isPaymentMethodLimitReached = data.paymentMethods.length >= 5
@@ -54,7 +42,7 @@ function Payment() {
 
   return (
     <LeftMenu
-      title="支払い方法の設定"
+      title="お支払い方法の設定"
       description={
         hasPaymentMethod
           ? '登録済みのクレジットカード情報'

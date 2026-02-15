@@ -3,16 +3,20 @@ import type { paths } from './api-types'
 
 const apiUrl = import.meta.env.VITE_API_URL as string
 
-let token: string | null = null
+type TokenGetter = () => Promise<string | null>
+let tokenGetter: TokenGetter | null = null
 
-export function setToken(newToken: string | null) {
-  token = newToken
+export function setTokenGetter(fn: TokenGetter) {
+  tokenGetter = fn
 }
 
 const authMiddleware: Middleware = {
-  onRequest({ request }) {
-    if (token) {
-      request.headers.set('Authorization', `Bearer ${token}`)
+  async onRequest({ request }) {
+    if (tokenGetter) {
+      const token = await tokenGetter()
+      if (token) {
+        request.headers.set('Authorization', `Bearer ${token}`)
+      }
     }
     return request
   },

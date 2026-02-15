@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 import { client } from '../../../../../../lib/api'
 
 export const useDeletePaymentMethod = () => {
@@ -16,6 +17,10 @@ export const useDeletePaymentMethod = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['payment-methods'] })
+      toast.success('支払い方法を削除しました')
+    },
+    onError: () => {
+      toast.error('支払い方法の削除に失敗しました')
     },
   })
 }
