@@ -29,37 +29,6 @@ Lydosのフロントエンドアプリケーションです。
 - **Biome 2.3** - 高速Linter/Formatter
 - **Bun** - パッケージマネージャー・ランタイム
 
-## ディレクトリ構成
-
-```
-lydos-view/
-├── src/
-│   ├── components/          # 再利用可能なコンポーネント
-│   │   └── AuthProvider.tsx # 認証トークン管理
-│   ├── hook/                # カスタムフック
-│   │   └── useRequireAuth.ts # 認証チェック・リダイレクト
-│   ├── lib/                 # ユーティリティ・API関連
-│   │   ├── api.ts           # APIクライアント設定
-│   │   ├── api-types.ts     # 自動生成されたOpenAPI型定義
-│   │   ├── openapi.json     # OpenAPIスキーマ定義
-│   │   └── utils.ts         # ユーティリティ関数
-│   └── routes/              # ページコンポーネント（TanStack Router）
-│       ├── __root.tsx       # ルートレイアウト
-│       ├── index.tsx        # ログイン画面
-│       ├── sign-up.tsx      # 登録画面
-│       └── _authenticated/  # 認証保護されたページ
-│           └── home/
-│               ├── index.tsx # チャットページ
-│               └── setting/ # 設定ページ
-│                   ├── plan/    # プラン選択
-│                   └── payment/ # 支払い方法設定
-├── public/                  # 公開アセット
-├── vite.config.ts           # Vite設定
-├── tailwind.config.js       # Tailwind設定
-├── biome.json               # Biome設定
-└── package.json             # パッケージ定義
-```
-
 ## セットアップ
 
 ```bash
