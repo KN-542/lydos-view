@@ -1,6 +1,16 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { ChevronLeft, ChevronRight, Menu, Plus, Send, Settings, Trash2 } from 'lucide-react'
+import {
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  Menu,
+  Plus,
+  Send,
+  Settings,
+  Trash2,
+} from 'lucide-react'
 import { Suspense, useEffect, useRef, useState } from 'react'
+import { MarkdownContent } from '../../../components/MarkdownContent'
 import { cn } from '../../../lib/utils'
 import { useCreateSession } from './_hook/useCreateSession'
 import { useDeleteSession } from './_hook/useDeleteSession'
@@ -31,6 +41,7 @@ function ChatPage() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false)
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
   const [streamError, setStreamError] = useState<string | null>(null)
+  const [pendingUserMessage, setPendingUserMessage] = useState<string | null>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   const { data: modelsData } = useModelsQuery()
@@ -45,15 +56,18 @@ function ChatPage() {
   const messages = messagesData?.messages ?? []
 
   const [selectedModelId, setSelectedModelId] = useState<number>(defaultModel.id)
+  const selectedModel = modelsData.models.find((m) => m.id === selectedModelId) ?? defaultModel
 
-  // 既存セッション選択時は、そのセッションのモデルを表示
-  const currentSession = sessions.find((s) => s.id === currentSessionId)
-
-  // メッセージ追加・ストリーミング時に最下部へスクロール (messages/streamingText は変化検知トリガー)
+  // メッセージ追加・ストリーミング時に最下部へスクロール
   // biome-ignore lint/correctness/useExhaustiveDependencies: scroll trigger
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages, streamingText])
+
+  // ストリーミング完了後にオプティミスティック表示をクリア
+  useEffect(() => {
+    if (!isStreaming) setPendingUserMessage(null)
+  }, [isStreaming])
 
   const handleSendMessage = async () => {
     if (prompt.trim() === '' || isStreaming) return
@@ -61,10 +75,10 @@ function ChatPage() {
     const content = prompt
     setPrompt('')
     setStreamError(null)
+    setPendingUserMessage(content) // 即時表示
 
     let sessionId = currentSessionId
 
-    // セッションがなければ作成
     if (sessionId === null) {
       const title = content.length > 20 ? `${content.slice(0, 20)}...` : content
       const session = await createSession({ modelId: selectedModelId, title })
@@ -79,11 +93,11 @@ function ChatPage() {
     }
   }
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault()
-      handleSendMessage()
-    }
+  const handleSelectSession = (sessionId: string) => {
+    const session = sessions.find((s) => s.id === sessionId)
+    setCurrentSessionId(sessionId)
+    if (session) setSelectedModelId(session.modelId)
+    setStreamError(null)
   }
 
   const handleDeleteSession = (e: React.MouseEvent, sessionId: string) => {
@@ -113,7 +127,6 @@ function ChatPage() {
         )}
       >
         <div className="w-64 h-full flex flex-col">
-          {/* チャット履歴 */}
           <div className="flex-1 overflow-y-auto p-4">
             <div className="mb-4 flex items-center justify-between">
               <h2 className="text-sm font-semibold text-gray-700">チャット履歴</h2>
@@ -141,7 +154,7 @@ function ChatPage() {
                 <button
                   type="button"
                   key={session.id}
-                  onClick={() => setCurrentSessionId(session.id)}
+                  onClick={() => handleSelectSession(session.id)}
                   className={cn(
                     'w-full rounded-lg p-2.5 text-left',
                     'hover:bg-gray-200 transition-colors',
@@ -168,7 +181,6 @@ function ChatPage() {
             </div>
           </div>
 
-          {/* 設定エリア */}
           <div className="border-t border-gray-200 p-4">
             <div className="relative">
               <button
@@ -233,11 +245,11 @@ function ChatPage() {
               >
                 <div
                   className={cn(
-                    'max-w-[80%] rounded-2xl px-4 py-3',
+                    'max-w-[80%] rounded-2xl px-4 py-3 text-sm',
                     message.role === 'user' ? 'bg-gray-700 text-white' : 'bg-gray-50 text-gray-900'
                   )}
                 >
-                  <p className="whitespace-pre-wrap text-sm leading-relaxed">{message.content}</p>
+                  <MarkdownContent content={message.content} dark={message.role === 'user'} />
                 </div>
                 <span className="mt-1 text-xs text-gray-400">
                   {new Date(message.createdAt).toLocaleString('ja-JP', {
@@ -251,19 +263,34 @@ function ChatPage() {
               </div>
             ))}
 
-            {/* ストリーミング中のアシスタントメッセージ */}
-            {isStreaming && (
-              <div className="flex flex-col items-start">
-                <div className="max-w-[80%] rounded-2xl px-4 py-3 bg-gray-50 text-gray-900">
-                  <p className="whitespace-pre-wrap text-sm leading-relaxed">
-                    {streamingText}
-                    <span className="inline-block w-1.5 h-4 ml-0.5 bg-gray-400 animate-pulse align-middle" />
-                  </p>
+            {/* オプティミスティック表示: 送信直後のユーザーメッセージ */}
+            {pendingUserMessage && (
+              <div className="flex flex-col items-end">
+                <div className="max-w-[80%] rounded-2xl px-4 py-3 bg-gray-700 text-white text-sm">
+                  <MarkdownContent content={pendingUserMessage} dark />
                 </div>
               </div>
             )}
 
-            {/* エラーメッセージ */}
+            {/* ローディング (初回トークン待ち) */}
+            {isStreaming && streamingText === '' && (
+              <div className="flex flex-col items-start">
+                <div className="max-w-[80%] rounded-2xl px-4 py-3 bg-gray-50 text-gray-400">
+                  <p className="text-sm">生成中...</p>
+                </div>
+              </div>
+            )}
+
+            {/* ストリーミング中のアシスタントメッセージ */}
+            {isStreaming && streamingText !== '' && (
+              <div className="flex flex-col items-start">
+                <div className="max-w-[80%] rounded-2xl px-4 py-3 bg-gray-50 text-gray-900 text-sm">
+                  <MarkdownContent content={streamingText} />
+                  <span className="inline-block w-1.5 h-4 ml-0.5 bg-gray-400 animate-pulse align-middle" />
+                </div>
+              </div>
+            )}
+
             {streamError && (
               <div className="flex flex-col items-start">
                 <div className="max-w-[80%] rounded-2xl px-4 py-3 bg-red-50 text-red-700 border border-red-200">
@@ -279,56 +306,64 @@ function ChatPage() {
         {/* 入力エリア */}
         <div className="border-t border-gray-200 bg-white p-4">
           <div className="mx-auto max-w-3xl">
-            <div className="flex gap-3">
+            <div
+              className={cn(
+                'rounded-2xl border border-gray-300 bg-white',
+                'focus-within:border-indigo-400 focus-within:ring-2 focus-within:ring-indigo-400/20',
+                'transition-shadow'
+              )}
+            >
+              {/* テキスト入力 */}
               <textarea
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
-                onKeyDown={handleKeyDown}
                 placeholder="メッセージを入力..."
                 disabled={isStreaming}
-                className={cn(
-                  'flex-1 resize-none rounded-xl border border-gray-300 px-4 py-3',
-                  'focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20',
-                  'text-sm disabled:opacity-50'
-                )}
+                className="w-full resize-none px-4 pt-3 pb-2 text-sm focus:outline-none disabled:opacity-50 bg-transparent rounded-2xl"
                 rows={1}
               />
-              <button
-                type="button"
-                onClick={handleSendMessage}
-                disabled={prompt.trim() === '' || isStreaming}
-                className={cn(
-                  'rounded-xl bg-gray-900 px-6 py-3 text-white',
-                  'hover:bg-gray-700 transition-colors',
-                  'disabled:opacity-50 disabled:cursor-not-allowed',
-                  'flex items-center gap-2'
-                )}
-              >
-                <Send size={18} />
-              </button>
-            </div>
-            <div className="mt-2 flex items-center justify-center gap-2">
-              {currentSession ? (
-                // 既存セッション: モデル表示のみ
-                <p className="text-xs text-gray-400">{currentSession.modelName} を使用中</p>
-              ) : (
-                // 新規チャット: モデル選択ドロップダウン
-                <select
-                  value={selectedModelId}
-                  onChange={(e) => setSelectedModelId(Number(e.target.value))}
+
+              {/* 下部バー: モデル選択 + 送信ボタン */}
+              <div className="flex items-center justify-between px-3 pb-3">
+                {/* モデル選択チップ */}
+                <div className="relative flex items-center">
+                  <select
+                    value={selectedModelId}
+                    onChange={(e) => setSelectedModelId(Number(e.target.value))}
+                    style={{
+                      backgroundColor: `${selectedModel.color}18`,
+                      borderColor: `${selectedModel.color}60`,
+                      color: selectedModel.color,
+                    }}
+                    className="text-xs font-medium rounded-lg pl-2.5 pr-7 py-1.5 border cursor-pointer focus:outline-none appearance-none"
+                  >
+                    {modelsData.models.map((model) => (
+                      <option key={model.id} value={model.id}>
+                        {model.name}
+                      </option>
+                    ))}
+                  </select>
+                  <ChevronDown
+                    size={12}
+                    className="pointer-events-none absolute right-2"
+                    style={{ color: selectedModel.color }}
+                  />
+                </div>
+
+                {/* 送信ボタン */}
+                <button
+                  type="button"
+                  onClick={handleSendMessage}
+                  disabled={prompt.trim() === '' || isStreaming}
                   className={cn(
-                    'text-xs text-gray-600 border border-gray-200 rounded-lg px-2 py-1',
-                    'focus:outline-none focus:border-indigo-400',
-                    'bg-white cursor-pointer'
+                    'rounded-xl p-2 text-white transition-colors',
+                    'disabled:opacity-40 disabled:cursor-not-allowed'
                   )}
+                  style={{ backgroundColor: selectedModel.color }}
                 >
-                  {modelsData.models.map((model) => (
-                    <option key={model.id} value={model.id}>
-                      {model.name}
-                    </option>
-                  ))}
-                </select>
-              )}
+                  <Send size={16} />
+                </button>
+              </div>
             </div>
           </div>
         </div>
