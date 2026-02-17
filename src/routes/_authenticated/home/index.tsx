@@ -59,6 +59,8 @@ function ChatPage() {
   const selectedModel = modelsData.models.find((m) => m.id === selectedModelId) ?? defaultModel
 
   // メッセージ追加・ストリーミング時に最下部へスクロール
+  // ref 操作に state を依存配列へ入れるのは本来不要だが、
+  // 変化のたびにスクロールをトリガーする手段として意図的に指定している
   // biome-ignore lint/correctness/useExhaustiveDependencies: scroll trigger
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
