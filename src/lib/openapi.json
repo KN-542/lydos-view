@@ -213,7 +213,11 @@
         "description": "指定した支払い方法を削除します。",
         "parameters": [
           {
-            "schema": { "type": "string", "description": "Stripe Payment Method ID (pm_xxx)" },
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Stripe Payment Method ID (pm_xxx)"
+            },
             "required": true,
             "description": "Stripe Payment Method ID (pm_xxx)",
             "name": "paymentMethodId",
@@ -280,6 +284,7 @@
                   },
                   "paymentMethodId": {
                     "type": "string",
+                    "minLength": 1,
                     "description": "Stripe Payment Method ID (pm_xxx)"
                   }
                 },
@@ -289,10 +294,7 @@
           }
         },
         "responses": {
-          "200": {
-            "description": "Success",
-            "content": { "application/json": { "schema": { "type": "object", "properties": {} } } }
-          },
+          "200": { "description": "Success" },
           "400": {
             "description": "Bad Request",
             "content": {
@@ -307,6 +309,18 @@
           },
           "401": {
             "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": { "error": { "type": "string" } },
+                  "required": ["error"]
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
             "content": {
               "application/json": {
                 "schema": {
