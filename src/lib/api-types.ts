@@ -482,22 +482,6 @@ export interface paths {
             'application/json': {
               /** @example clxxxxx */
               id: string
-              /** @example 新しいチャット */
-              title: string
-              /** @example 1 */
-              modelId: number
-              /** @example Gemini 2.0 Flash */
-              modelName: string
-              /**
-               * Format: date-time
-               * @example 2026-01-01T00:00:00.000Z
-               */
-              createdAt: string
-              /**
-               * Format: date-time
-               * @example 2026-01-01T00:00:00.000Z
-               */
-              updatedAt: string
             }
           }
         }

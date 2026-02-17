@@ -407,23 +407,8 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": {
-                    "id": { "type": "string", "example": "clxxxxx" },
-                    "title": { "type": "string", "example": "新しいチャット" },
-                    "modelId": { "type": "number", "example": 1 },
-                    "modelName": { "type": "string", "example": "Gemini 2.0 Flash" },
-                    "createdAt": {
-                      "type": "string",
-                      "format": "date-time",
-                      "example": "2026-01-01T00:00:00.000Z"
-                    },
-                    "updatedAt": {
-                      "type": "string",
-                      "format": "date-time",
-                      "example": "2026-01-01T00:00:00.000Z"
-                    }
-                  },
-                  "required": ["id", "title", "modelId", "modelName", "createdAt", "updatedAt"]
+                  "properties": { "id": { "type": "string", "example": "clxxxxx" } },
+                  "required": ["id"]
                 }
               }
             }
