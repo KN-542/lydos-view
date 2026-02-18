@@ -17,6 +17,7 @@ export function useChangePlan() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['plans'] })
+      queryClient.invalidateQueries({ queryKey: ['chat-models'] })
       toast.success('プランを変更しました')
     },
     onError: () => {
