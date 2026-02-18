@@ -11,7 +11,10 @@
     "format": "biome format --write .",
     "format:check": "biome format .",
     "preview": "vite preview",
-    "generate:api": "curl -k https://local.api.lydos/doc -o src/lib/openapi.json && openapi-typescript src/lib/openapi.json -o src/lib/api-types.ts"
+    "generate:api": "curl -k https://local.api.lydos/doc -o src/lib/openapi.json && openapi-typescript src/lib/openapi.json -o src/lib/api-types.ts",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:report": "playwright show-report"
   },
   "dependencies": {
     "@clerk/clerk-react": "^5.60.0",
@@ -32,7 +35,9 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.3.13",
+    "@clerk/backend": "^2.31.1",
     "@eslint/js": "^9.39.1",
+    "@playwright/test": "^1.58.2",
     "@tanstack/router-plugin": "^1.157.15",
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.5",
@@ -41,6 +46,7 @@
     "@vitejs/plugin-react": "^5.1.1",
     "autoprefixer": "^10.4.23",
     "babel-plugin-react-compiler": "^1.0.0",
+    "dotenv": "^17.3.1",
     "eslint": "^9.39.1",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",

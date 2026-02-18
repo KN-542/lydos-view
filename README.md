@@ -28,6 +28,7 @@ Lydosのフロントエンドアプリケーションです。
 ### 開発ツール
 - **Biome 2.3** - 高速Linter/Formatter
 - **Bun** - パッケージマネージャー・ランタイム
+- **Playwright 1.58** - E2Eテストフレームワーク
 
 ## セットアップ
 
@@ -47,3 +48,44 @@ bun run format        # コード整形
 bun run typecheck     # TypeScript型チェック
 bun run build         # プロダクションビルド
 ```
+
+## E2Eテスト
+
+[Playwright](https://playwright.dev/) を使ったエンドツーエンドテスト。
+
+### 前提
+
+- lydos-setup の Docker コンテナが起動済み
+- lydos-api の開発サーバーが起動済み（port 3001）
+- lydos-view の開発サーバーが起動済み（port 5173）
+
+### セットアップ
+
+```bash
+# ブラウザのインストール（初回のみ）
+bunx playwright install
+
+# テスト用環境変数を確認（.env.test に認証情報が記載済み）
+cat .env.test
+```
+
+### 実行
+
+```bash
+# テスト実行
+bun run test:e2e
+
+# ブラウザUIで対話的に実行
+bun run test:e2e:ui
+
+# テスト結果をブラウザで確認
+bun run test:e2e:report
+# または
+bunx playwright show-report
+```
+
+### 補足
+
+- 認証には Clerk の `sign_in_token` API を使用し、メール OTP などの二段階認証をバイパス
+- テスト用アカウント情報は `.env.test` に記載（`.gitignore` 対象）
+- テスト計画・観点の詳細は [`.claude/e2e-test-plan.md`](.claude/e2e-test-plan.md) を参照
